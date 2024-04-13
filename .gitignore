@@ -1,8 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/flask,python,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,python,vs
-
+config.py
 notes.txt
-
+auto_scr.py
 ### Flask ###
 instance/*
 !instance/.gitignore
