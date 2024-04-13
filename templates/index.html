@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Analytics Dashboard</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Optional: Custom styles */
+        .graph-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            background-color: #f7f7f7;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            padding-top: 2rem;
+        }
+        .dashboard-header {
+            margin-bottom: 2rem;
+            color: #495057;
+        }
+        .card {
+            box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+            border: none;
+            margin-bottom: 2rem;
+        }
+        .card h2 {
+            font-size: 1.25rem;
+            margin-bottom: .75rem;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        .form-label {
+            color: #495057;
+            font-weight: 500;
+            margin-bottom: .5rem;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header text-center">
+            <h1>College Analytics Dashboard</h1>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add New Student</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="addStudentForm">
+                            <div class="form-group">
+                                <label for="studentName">Name</label>
+                                <input type="text" class="form-control" id="studentName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentEmail">Email</label>
+                                <input type="email" class="form-control" id="studentEmail" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add New Enrollment</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="addEnrollmentForm">
+                            <!-- You'll need to populate these select options dynamically based on your actual data -->
+                            <div class="form-group">
+                                <label for="enrollmentStudent">Student</label>
+                                <select class="form-control" id="enrollmentStudent" required>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="enrollmentCourse">Course</label>
+                                <select class="form-control" id="enrollmentCourse" required>
+                                    <!-- Options will be populated by JavaScript -->
+                                </select>
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="enrollmentTime">Time</label>
+                                <select class="form-control" id="enrollmentTime" required>
+            
+                                </select>
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="enrollmentGrade">Grade</label>
+                                <select class="form-control" id="enrollmentGrade" required>
+                                    <option value="O">O</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A">A</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="F">F</option>
+                                </select>
+                            </div>
+            
+                            <div class="form-group">
+                                <label for="enrollmentAttendance">Attendance Percentage</label>
+                                <input class="form-control" type="number" id="enrollmentAttendance" required>
+                            </div>
+                                    
+                            <!-- ... -->
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+        
+                </div>
+
+            </div>
+        
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Enrollments Overview</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="enrollmentsGraph"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Grades Distribution</h2>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="gradesGraph"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+
+        <!-- Toast Container -->
+        <div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+            <div style="position: absolute; top: 0; right: 0;">
+                <div id="toastContainer" style="position: fixed; top: 20px; right: 20px;"></div>
+            </div>
+        </div>
+    
+</body>
+</html>
