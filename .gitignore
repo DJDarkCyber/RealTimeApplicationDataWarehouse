@@ -2,7 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask,python,vs
 config.py
 notes.txt
-auto_scr.py
+# auto_scr.py
+# web_auto.py
+# sneaky_keylogger.py
 ### Flask ###
 instance/*
 !instance/.gitignore
